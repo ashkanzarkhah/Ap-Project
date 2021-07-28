@@ -5,6 +5,7 @@ using namespace httplib;
 int main(){
 	Client cli("localhost", 8080);
 
+	/*
 	MultipartFormDataItems items = {
 	  { "text1", "text default", "", "" },
 	  { "text2", "aωb", "", "" },
@@ -16,6 +17,15 @@ int main(){
 	if(auto res = cli.Post("/post", items)){
 		std :: cout << res -> body << '\n';
 		std :: cout.flush();
+	}
+	*/
+
+	MultipartFormDataItems items = {
+			{"register", "ashkan zarkhah", "", ""}
+	};
+
+	if(auto res = cli.Post("/register", items)){
+		std :: cout << res -> body << std :: endl;
 	}
 	else{
 		std :: cout << "Ridim ke !! \n";
