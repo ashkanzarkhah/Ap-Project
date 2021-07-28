@@ -1,50 +1,28 @@
+#include <iostream>
 #include "httplib.h"
+#include "Player.h"
 
+using namespace std;
 using namespace httplib;
+
+Player A;
 
 int main(){
 	Client cli("localhost", 8080);
 
-	/*
+	cout << "Please Enter your name :" << endl;
+	cin >> A.name;
 	MultipartFormDataItems items = {
-	  { "text1", "text default", "", "" },
-	  { "text2", "aωb", "", "" },
-	  { "file1", "h\ne\n\nl\nl\no\n", "hello.txt", "text/plain" },
-	  { "file2", "{\n  \"world\", true\n}\n", "world.json", "application/json" },
-	  { "file3", "", "", "application/octet-stream" },
-	};
-
-	if(auto res = cli.Post("/post", items)){
-		std :: cout << res -> body << '\n';
-		std :: cout.flush();
-	}
-	*/
-
-	MultipartFormDataItems items = {
-			{"register", "ashkan zarkhah", "", ""}
+			{"Register", A.name, "", ""}
 	};
 
 	if(auto res = cli.Post("/register", items)){
-		std :: cout << res -> body << std :: endl;
+		A.number = (int)(res -> body) [0] - 48;
+		cout << "You are player number " << A.number << endl;
 	}
 	else{
-		std :: cout << "Ridim ke !! \n";
-		std :: cout.flush();
+		cout << "Ridim ke !!" << endl;
 	}
 
-	if(auto res = cli.Get("/hi")){
-		if(res -> status == 200){
-			std :: cout << res -> body << '\n';
-			std :: cout.flush();
-		}
-	}
-	else{
-		std :: cout << "RIDIM KE !! \n";
-		std :: cout.flush();
-	}
 	return 0;
 }
-
-
-
-

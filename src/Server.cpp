@@ -1,37 +1,35 @@
-//#define CPPHTTPLIB_OPENSSL_SUPPORT
-#include "httplib.h"
+#include <iostream>
 #include <vector>
+#include "httplib.h"
+#include "Player.h"
 
+using namespace std;
 using namespace httplib;
+
 #define pb push_back
 
-std :: vector <std :: string> V;
+vector <Player> V;
 
-int main(void){
+int main(){
 	Server svr;
 
-	svr.Get("/hi", [](const Request &req, Response &res) {
-		res.set_content("Hello World!", "mamad");
-	});
-
-	svr.Post("/post", [&](const Request &req, Response &res) {
-	  auto size = req.files.size();
-	  auto ret = req.has_file("name1");
-	  const auto& file = req.get_file_value("file2");
-	  std :: cout << file.name << " " << file.content << std :: endl;
-	  res.set_content("HI", "mamad");
-	});
-
 	svr.Post("/register", [&](const Request &req, Response &res){
-		const auto& file = req.get_file_value("register");
-		V.pb(file.content);
-		std :: string tmp = "you are player number ";
-		tmp += (char)((int)V.size() + 49);
-		res.set_content(tmp, "mamad");
-	});
+		bool flag = req.has_file("Register");
+		if(!flag){
+			res.set_content("Invalid Input", "Error");
+		}
+		else{
+			const auto& file = req.get_file_value("Register");
+			Player tmp;
+			tmp.name = file.content;
+			tmp.number = (int)V.size() + 1;
+			cout << "Player number " << tmp.number << " registered with the name of " << tmp.name << endl;
 
-	svr.Get("/stop", [&](const Request &req, Response &res) {
-		svr.stop();
+			V.pb(tmp);
+			string tmpres = "";
+			tmpres += (char)(tmp.number + 48);
+			res.set_content(tmpres, "Success");
+		}
 	});
 
 	svr.listen("localhost", 8080);
