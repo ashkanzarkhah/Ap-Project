@@ -17,12 +17,37 @@ int main(){
 	};
 
 	if(auto res = cli.Post("/register", items)){
-		A.number = (int)(res -> body) [0] - 48;
-		cout << "You are player number " << A.number << endl;
+		if((res -> body) == "Invalid Request"){
+			cout << "You can't log in, the game is running" << endl;
+			return 0;
+		}
+		else{
+			A.number = (int)(res -> body) [0] - 48;
+			cout << "You are player number " << A.number << endl;
+		}
 	}
 	else{
 		cout << "Ridim ke !!" << endl;
 	}
 
+	while(true){
+		bool flag = false;
+		string tmp = "";
+		while(!flag){
+			tmp += (char)(A.number + 48);
+			items = {
+					{"Check", tmp, "", ""}
+			};
+			if(auto res = cli.Post("/check", items)){
+				if((res -> body) == "YES") flag = true;
+			}
+		}
+		cout << "It's Your turn" << endl;
+		cout << "Enter your Move :" << endl;
+		cin >> tmp;
+		items[0].name = "Move";
+		items[0].content_type = tmp;
+		auto res = cli.Post("/move", items);
+	}
 	return 0;
 }

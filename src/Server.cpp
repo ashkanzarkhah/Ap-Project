@@ -8,15 +8,21 @@ using namespace httplib;
 
 #define pb push_back
 
+int n, sz, cur = 1;
 vector <Player> V;
 
 int main(){
 	Server svr;
 
+	cout << "Enter number of players :" << endl;
+	cin >> n;
+	cout << "Enter size of the ground :" << endl;
+	cin >> sz;
+
 	svr.Post("/register", [&](const Request &req, Response &res){
 		bool flag = req.has_file("Register");
-		if(!flag){
-			res.set_content("Invalid Input", "Error");
+		if(!flag || (int)V.size() == n){
+			res.set_content("Invalid Request", "Error");
 		}
 		else{
 			const auto& file = req.get_file_value("Register");
@@ -29,6 +35,42 @@ int main(){
 			string tmpres = "";
 			tmpres += (char)(tmp.number + 48);
 			res.set_content(tmpres, "Success");
+		}
+	});
+
+	svr.Post("/check", [&](const Request &req, Response &res){
+		bool flag = req.has_file("Check");
+		if(!flag){
+			res.set_content("Invalid Request", "Error");
+		}
+		else{
+			const auto& file = req.get_file_value("Check");
+			int tmp = (int)(file.content[0]) - 48;
+			if((int)V.size() != n || tmp != cur){
+				res.set_content("NO", "Success");
+			}
+			else{
+				res.set_content("YES", "Success");
+			}
+		}
+	});
+
+	svr.Post("/move", [&](const Request &req, Response &res){
+		bool flag = req.has_file("Move");
+		if(!flag){
+			res.set_content("Invalid Request", "Error");
+		}
+		else{
+			const auto& file = req.get_file_value("Move");
+			int tmp = (int)(file.content[0]) - 48;
+			if((int)V.size() != n || tmp != cur){
+				res.set_content("Invalid Request", "Error");
+			}
+			else{
+				cout << file.content_type << endl;
+				res.set_content("Success", "Success");
+				cur = (cur % n) + 1;
+			}
 		}
 	});
 

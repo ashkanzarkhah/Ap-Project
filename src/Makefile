@@ -1,10 +1,13 @@
 cmp = g++
 flags = -std=c++11 -pthread
 
-All : Client.o Server.o
+All : Client.o Server.o run
 
-Client.o: httplib.h player.h
+run:
+	./Server
+
+Client.o:
 	$(cmp) -o Client $(flags) Client.cpp
 
-Server.o: httplib.h Player.h
+Server.o:
 	$(cmp) -o Server $(flags) Server.cpp
