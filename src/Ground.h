@@ -45,6 +45,22 @@ public:
 		return ans;
 	}
 
+	bool Move(int i, char move){
+		pii tmp;
+		if(move == 'U') tmp = {-1, 0};
+		if(move == 'D') tmp = {1, 0};
+		if(move == 'R') tmp = {0, 1};
+		if(move == 'L') tmp = {0, -1};
+		tmp.F += pl[i].F, tmp.S += pl[i].S;
+		if(tmp.F < 0 || tmp.S < 0) return false;
+		if(tmp.F >= sz || tmp.S >= sz) return false;
+		if(mp[tmp.F + pl[i].F][tmp.S + pl[i].S] != 'E') return false;
+		mp[2 * tmp.F][2 * tmp.S] = mp[2 * pl[i].F][2 * pl[i].S];
+		mp[2 * pl[i].F][2 * pl[i].S] = 'o';
+		pl[i] = tmp;
+		return true;
+	}
+
 private:
 	int sz;
 	int cnt;

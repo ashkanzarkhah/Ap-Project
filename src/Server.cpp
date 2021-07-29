@@ -66,11 +66,10 @@ int main(){
 		else{
 			const auto& file = req.get_file_value("Move");
 			int tmp = (int)(file.content[0]) - 48;
-			if((int)V.size() != n || tmp != cur){
+			if((int)V.size() != n || tmp != cur || G.Move(cur - 1, file.content_type[0]) == false){
 				res.set_content("Invalid Request", "Error");
 			}
 			else{
-				cout << file.content_type << endl;
 				res.set_content("Success", "Success");
 				cur = (cur % n) + 1;
 			}

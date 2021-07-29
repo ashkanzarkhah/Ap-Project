@@ -50,10 +50,15 @@ int main(){
 		cout << mp;
 		cout << "Enter your Move :" << endl;
 		cin >> tmp;
-		cout << "Please wait until it's your turn !" << endl;
 		items[0].name = "Move";
 		items[0].content_type = tmp;
 		auto res = cli.Post("/move", items);
+		if(res -> body == "Invalid Request"){
+			cout << "Invalid Move, Try agarin !" << endl;
+		}
+		else{
+			cout << "Your move is done, wait till it's your turn again !" << endl;
+		}
 	}
 	return 0;
 }
