@@ -33,18 +33,24 @@ int main(){
 	while(true){
 		bool flag = false;
 		string tmp = "";
+		string mp = "";
 		while(!flag){
 			tmp += (char)(A.number + 48);
 			items = {
 					{"Check", tmp, "", ""}
 			};
 			if(auto res = cli.Post("/check", items)){
-				if((res -> body) == "YES") flag = true;
+				if((res -> body) != "NO"){
+					flag = true;
+					mp = res -> body;
+				}
 			}
 		}
 		cout << "It's Your turn" << endl;
+		cout << mp;
 		cout << "Enter your Move :" << endl;
 		cin >> tmp;
+		cout << "Please wait until it's your turn !" << endl;
 		items[0].name = "Move";
 		items[0].content_type = tmp;
 		auto res = cli.Post("/move", items);

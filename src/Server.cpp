@@ -2,6 +2,7 @@
 #include <vector>
 #include "httplib.h"
 #include "Player.h"
+#include "Ground.h"
 
 using namespace std;
 using namespace httplib;
@@ -18,6 +19,8 @@ int main(){
 	cin >> n;
 	cout << "Enter size of the ground :" << endl;
 	cin >> sz;
+
+	Ground G(sz);
 
 	svr.Post("/register", [&](const Request &req, Response &res){
 		bool flag = req.has_file("Register");
@@ -50,7 +53,7 @@ int main(){
 				res.set_content("NO", "Success");
 			}
 			else{
-				res.set_content("YES", "Success");
+				res.set_content(G.Get_Map(), "Success");
 			}
 		}
 	});
