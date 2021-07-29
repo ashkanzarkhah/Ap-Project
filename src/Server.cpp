@@ -20,7 +20,7 @@ int main(){
 	cout << "Enter size of the ground :" << endl;
 	cin >> sz;
 
-	Ground G(sz);
+	Ground G(sz, n);
 
 	svr.Post("/register", [&](const Request &req, Response &res){
 		bool flag = req.has_file("Register");
