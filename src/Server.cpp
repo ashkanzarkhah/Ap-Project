@@ -60,13 +60,28 @@ int main(){
 
 	svr.Post("/move", [&](const Request &req, Response &res){
 		bool flag = req.has_file("Move");
+		flag |= req.has_file("Wall");
 		if(!flag){
 			res.set_content("Invalid Request", "Error");
 		}
-		else{
+		else if(req.has_file("Move")){
 			const auto& file = req.get_file_value("Move");
 			int tmp = (int)(file.content[0]) - 48;
 			if((int)V.size() != n || tmp != cur || G.Move(cur - 1, file.content_type[0]) == false){
+				res.set_content("Invalid Request", "Error");
+			}
+			else{
+				res.set_content("Success", "Success");
+				cur = (cur % n) + 1;
+			}
+		}
+		else{
+			const auto& file = req.get_file_value("Wall");
+			int i = (int)(file.content[0]) - 49;
+			int x = (int)(file.content[1]) - 65;
+			int y = (int)(file.filename[0]) - 65;
+			cout << i << " " << x << " " << y << " " << file.content_type[0] << endl;
+			if((int)V.size() != n || i + 1 != cur || G.Add_Wall(i, x, y, file.content_type[0]) == false){
 				res.set_content("Invalid Request", "Error");
 			}
 			else{

@@ -29,6 +29,7 @@ public:
 		tot.pb({sz / 2, sz - 1});
 		for(int i = 0; i < cnt; i++){
 			pl.pb(tot[i]);
+			cntwall.pb(5);
 			mp[pl[i].F * 2][pl[i].S * 2] = (char)(65 + i);
 		}
 	}
@@ -61,10 +62,42 @@ public:
 		return true;
 	}
 
+	int Get_Wall_Num(int i){
+		return cntwall[i];
+	}
+
+	bool Add_Wall(int i, int x, int y, char T){
+		cout << "YoHo" << endl;
+		if(x < 0 || x >= sz) return false;
+		if(y < 0 || y >= sz) return false;
+		if(cntwall[i] == 0) return false;
+		if(T == 'V'){
+			if(y - 1 < 0 || y + 1 >= sz || x == 0) return false;
+			for(int i = 2 * y - 2; i <= 2 * y + 2; i++) if(mp[2 * x - 1][i] == 'W') return false;
+			cntwall[i] --;
+			for(int i = 2 * y - 2; i <= 2 * y + 2; i++) mp[2 * x - 1][i] = 'W';
+		}
+		else{
+			if(x - 1 < 0 || x + 1 >= sz || y == sz - 1) return false;
+			for(int i = 2 * x - 2; i <= 2 * x + 2; i++) if(mp[i][2 * y + 1] == 'W') return false;
+			cntwall[i] --;
+			for(int i = 2 * x - 2; i <= 2 * x + 2; i++) mp[i][2 * y + 1] = 'W';
+		}
+		cout << "YOHO" << endl;
+		return true;
+	}
+
+	bool Check(int i){
+		if(pl[i].F == sz / 2 && pl[i].S == sz / 2) return true;
+		return false;
+	}
+
+
 private:
 	int sz;
 	int cnt;
 	char ** mp;
 	vector <pii> pl;
+	vector <int> cntwall;
 	vector <pii> tot;
 };

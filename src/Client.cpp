@@ -34,11 +34,11 @@ int main(){
 		bool flag = false;
 		string tmp = "";
 		string mp = "";
+		tmp += (char)(A.number + 48);
+		items = {
+				{"Check", tmp, "", ""}
+		};
 		while(!flag){
-			tmp += (char)(A.number + 48);
-			items = {
-					{"Check", tmp, "", ""}
-			};
 			if(auto res = cli.Post("/check", items)){
 				if((res -> body) != "NO"){
 					flag = true;
@@ -48,10 +48,34 @@ int main(){
 		}
 		cout << "It's Your turn" << endl;
 		cout << mp;
-		cout << "Enter your Move :" << endl;
+		cout << "Enter your move type :(M to move and W to put a Wall)" << endl;
 		cin >> tmp;
-		items[0].name = "Move";
-		items[0].content_type = tmp;
+		if(tmp == "M"){
+			cout << "Enter your move (U, D, R, L) :" << endl;
+			cin >> tmp;
+			items[0].name = "Move";
+			items[0].content_type = tmp;
+		}
+		else if(tmp == "W"){
+			int x, y;
+			cout << "Enter your wall cordinates & type(H, V) :" << endl;
+			cin >> x >> y >> tmp;
+			items[0].name = "Wall";
+			items[0].content_type = tmp;
+
+			tmp = "";
+			tmp += (char)(65 + x);
+			items[0].content += tmp;
+
+			tmp = "";
+			tmp += (char)(65 + y);
+			items[0].filename = tmp;
+			cout << items[0].name << " " << items[0].content_type << " " << items[0].filename << " " << items[0].content << endl;
+		}
+		else{
+			cout << "Invalid Move, Try agarin !" << endl;
+			continue;
+		}
 		auto res = cli.Post("/move", items);
 		if(res -> body == "Invalid Request"){
 			cout << "Invalid Move, Try agarin !" << endl;
