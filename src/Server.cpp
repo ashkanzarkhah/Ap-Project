@@ -9,7 +9,7 @@ using namespace httplib;
 
 #define pb push_back
 
-int n, sz, cur = 1;
+int n, sz, cur = 1, blackout = -1;
 vector <Player> V;
 
 int main(){
@@ -53,7 +53,12 @@ int main(){
 				res.set_content("NO", "Success");
 			}
 			else{
-				res.set_content(G.Get_Map(), "Success");
+				if(blackout != -1){
+					res.set_content("Shutdown", "Success");
+					cur = (cur % n) + 1;
+					if(cur == blackout) svr.stop();
+				}
+				else res.set_content(G.Get_Map(), "Success");
 			}
 		}
 	});
@@ -71,8 +76,15 @@ int main(){
 				res.set_content("Invalid Request", "Error");
 			}
 			else{
-				res.set_content("Success", "Success");
-				cur = (cur % n) + 1;
+				if(G.Check(cur - 1)){
+					res.set_content("Finish", "Seccess");
+					cout << "Player number " << cur << " wins !" << endl;
+					blackout = cur;
+				}
+				else{
+					res.set_content("Success", "Success");
+					cur = (cur % n) + 1;
+				}
 			}
 		}
 		else{

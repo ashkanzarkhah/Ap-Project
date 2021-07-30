@@ -40,7 +40,8 @@ int main(){
 		};
 		while(!flag){
 			if(auto res = cli.Post("/check", items)){
-				if((res -> body) != "NO"){
+				if((res -> body) == "Shutdown") return 0;
+				else if((res -> body) != "NO"){
 					flag = true;
 					mp = res -> body;
 				}
@@ -78,6 +79,9 @@ int main(){
 		auto res = cli.Post("/move", items);
 		if(res -> body == "Invalid Request"){
 			cout << "Invalid Move, Try agarin !" << endl;
+		}
+		else if(res -> body == "Finish"){
+			cout << "You win !" << endl;
 		}
 		else{
 			cout << "Your move is done, wait till it's your turn again !" << endl;
