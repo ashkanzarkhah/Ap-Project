@@ -80,7 +80,6 @@ int main(){
 			int i = (int)(file.content[0]) - 49;
 			int x = (int)(file.content[1]) - 65;
 			int y = (int)(file.filename[0]) - 65;
-			cout << i << " " << x << " " << y << " " << file.content_type[0] << endl;
 			if((int)V.size() != n || i + 1 != cur || G.Add_Wall(i, x, y, file.content_type[0]) == false){
 				res.set_content("Invalid Request", "Error");
 			}

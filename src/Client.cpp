@@ -70,7 +70,6 @@ int main(){
 			tmp = "";
 			tmp += (char)(65 + y);
 			items[0].filename = tmp;
-			cout << items[0].name << " " << items[0].content_type << " " << items[0].filename << " " << items[0].content << endl;
 		}
 		else{
 			cout << "Invalid Move, Try agarin !" << endl;

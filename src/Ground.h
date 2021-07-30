@@ -67,7 +67,6 @@ public:
 	}
 
 	bool Add_Wall(int i, int x, int y, char T){
-		cout << "YoHo" << endl;
 		if(x < 0 || x >= sz) return false;
 		if(y < 0 || y >= sz) return false;
 		if(cntwall[i] == 0) return false;
@@ -83,7 +82,6 @@ public:
 			cntwall[i] --;
 			for(int i = 2 * x - 2; i <= 2 * x + 2; i++) mp[i][2 * y + 1] = 'W';
 		}
-		cout << "YOHO" << endl;
 		return true;
 	}
 
