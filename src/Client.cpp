@@ -6,6 +6,7 @@ using namespace std;
 using namespace httplib;
 
 Player A;
+bool start = false;
 
 int main(){
 	Client cli("localhost", 8080);
@@ -18,12 +19,17 @@ int main(){
 
 	if(auto res = cli.Post("/register", items)){
 		if((res -> body) == "Invalid Request"){
-			cout << "You can't log in, the game is running" << endl;
+			cout << "Server is off" << endl;
+			return 0;
+		}
+		else if((res -> body) == "Server is full"){
+			cout << "Server is full" << endl;
 			return 0;
 		}
 		else{
-			A.number = (int)(res -> body) [0] - 48;
+			A.number = (int)(res -> body)[0] - 48;
 			cout << "You are player number " << A.number << endl;
+			cout << "Waiting for others to join !" << endl;
 		}
 	}
 	else{
@@ -41,14 +47,36 @@ int main(){
 		while(!flag){
 			if(auto res = cli.Post("/check", items)){
 				if((res -> body) == "Shutdown") return 0;
-				else if((res -> body) != "NO"){
+				if((res -> body) == "Still registering") continue;
+				if((res -> get_header_value("Content-Type")) == "No"){
+					if(!start){
+						cout << "Game started !" << endl;
+						start = true;
+					}
+					tmp = res -> body;
+					if(tmp != mp){
+						mp = tmp;
+						cout << "The map is changed, new map is: " << endl;
+						cout << mp << endl;
+						cout << "It's not your turn !" << endl;
+					}
+				}
+				else{
+					if(!start){
+						cout << "Game started !" << endl;
+						start = true;
+					}
 					flag = true;
-					mp = res -> body;
+					tmp = res -> body;
+					if(tmp != mp){
+						mp = tmp;
+						cout << "The map is changed, new map is: " << endl;
+						cout << mp << endl;
+					}
 				}
 			}
 		}
 		cout << "It's Your turn" << endl;
-		cout << mp;
 		cout << "Enter your move type :(M to move and W to put a Wall)" << endl;
 		cin >> tmp;
 		if(tmp == "M"){

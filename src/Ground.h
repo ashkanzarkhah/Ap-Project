@@ -41,7 +41,7 @@ public:
 				ans += mp[i][j];
 				ans += " ";
 			}
-			ans += '\n';
+			if(i + 1 != 2 * sz - 1) ans += '\n';
 		}
 		return ans;
 	}

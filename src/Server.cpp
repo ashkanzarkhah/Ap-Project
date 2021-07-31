@@ -17,27 +17,36 @@ int main(){
 
 	cout << "Enter number of players :" << endl;
 	cin >> n;
-	cout << "Enter size of the ground :" << endl;
+	if(n > 4) return cout << "Invalid Input" << endl, 0;
+
+	cout << "Enter size of ground :" << endl;
 	cin >> sz;
+	if(sz % 2 == 0 || sz < 3) return cout << "Invalid Input" << endl, 0;
 
 	Ground G(sz, n);
 
+	cout << "Waiting for players to register" << endl;
 	svr.Post("/register", [&](const Request &req, Response &res){
-		bool flag = req.has_file("Register");
-		if(!flag || (int)V.size() == n){
+		bool Flag = req.has_file("Register");
+		if(!Flag){
 			res.set_content("Invalid Request", "Error");
+		}
+		else if((int)V.size() == n){
+			res.set_content("Server is full", "Success");
 		}
 		else{
 			const auto& file = req.get_file_value("Register");
-			Player tmp;
-			tmp.name = file.content;
-			tmp.number = (int)V.size() + 1;
-			cout << "Player number " << tmp.number << " registered with the name of " << tmp.name << endl;
+			Player TmpPlayer;
+			TmpPlayer.name = file.content;
+			TmpPlayer.number = (int)V.size() + 1;
+			cout << TmpPlayer.name << " registered as player number " << TmpPlayer.number << endl;
 
-			V.pb(tmp);
-			string tmpres = "";
-			tmpres += (char)(tmp.number + 48);
-			res.set_content(tmpres, "Success");
+			V.pb(TmpPlayer);
+			string TmpRes = "";
+			TmpRes += (char)(TmpPlayer.number + 48);
+			res.set_content(TmpRes, "Success");
+
+			if((int)V.size() == n) cout << "Game started" << endl;
 		}
 	});
 
@@ -49,8 +58,11 @@ int main(){
 		else{
 			const auto& file = req.get_file_value("Check");
 			int tmp = (int)(file.content[0]) - 48;
-			if((int)V.size() != n || tmp != cur){
-				res.set_content("NO", "Success");
+			if((int)V.size() != n){
+				res.set_content("Still registering", "No");
+			}
+			else if(tmp != cur){
+				res.set_content(G.Get_Map(), "No");
 			}
 			else{
 				if(blackout != -1){
@@ -58,7 +70,7 @@ int main(){
 					cur = (cur % n) + 1;
 					if(cur == blackout) svr.stop();
 				}
-				else res.set_content(G.Get_Map(), "Success");
+				else res.set_content(G.Get_Map(), "Yes");
 			}
 		}
 	});
@@ -91,9 +103,10 @@ int main(){
 				res.set_content("Invalid Request", "Error");
 			}
 			else{
+				cout << V[cur - 1].name << " made a move !" << endl;
 				if(G.Check(cur - 1)){
 					res.set_content("Finish", "Seccess");
-					cout << "Player number " << cur << " wins !" << endl;
+					cout << V[cur - 1].name << " won !" << endl;
 					blackout = cur;
 				}
 				else{
@@ -111,6 +124,7 @@ int main(){
 				res.set_content("Invalid Request", "Error");
 			}
 			else{
+				cout << V[cur - 1].name << " added a wall !" << endl;
 				res.set_content("Success", "Success");
 				cur = (cur % n) + 1;
 			}
