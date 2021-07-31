@@ -27,7 +27,7 @@ int main(){
 		}
 	}
 	else{
-		cout << "Ridim ke !!" << endl;
+		cout << "Server is off" << endl;
 	}
 
 	while(true){
@@ -58,6 +58,9 @@ int main(){
 			items[0].content_type = tmp;
 		}
 		else if(tmp == "W"){
+			items[0].name = "Wallcnt";
+			auto res = cli.Post("/wallcnt", items);
+			cout << "You have " << (res -> body) << " walls left !" << endl;
 			int x, y;
 			cout << "Enter your wall cordinates & type(H, V) :" << endl;
 			cin >> x >> y >> tmp;
@@ -85,6 +88,7 @@ int main(){
 		}
 		else{
 			cout << "Your move is done, wait till it's your turn again !" << endl;
+			cout << res -> get_header_value("Content-Type") << endl;
 		}
 	}
 	return 0;

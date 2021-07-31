@@ -63,6 +63,21 @@ int main(){
 		}
 	});
 
+	svr.Post("/wallcnt", [&](const Request &req, Response &res){
+		bool flag = req.has_file("Wallcnt");
+		if(flag){
+			const auto& file = req.get_file_value("Wallcnt");
+			int i = (int)(file.content[0]) - 49;
+			int cntleft = G.Get_Wall_Num(i);
+			string tmp = "";
+			tmp += (char)(cntleft + 48);
+			res.set_content(tmp, "Success");
+		}
+		else{
+			res.set_content("Invalid Request", "Error");
+		}
+	});
+
 	svr.Post("/move", [&](const Request &req, Response &res){
 		bool flag = req.has_file("Move");
 		flag |= req.has_file("Wall");
