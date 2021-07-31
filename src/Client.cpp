@@ -46,7 +46,11 @@ int main(){
 		};
 		while(!flag){
 			if(auto res = cli.Post("/check", items)){
-				if((res -> body) == "Shutdown") return 0;
+				if((res -> body) == "Shutdown"){
+					if((res -> get_header_value("Content-Type")) == "Win") cout << "Congrats, you won !" << endl;
+					else cout << "Sorry, you lost !" << endl;
+					return 0;
+				}
 				if((res -> body) == "Still registering") continue;
 				if((res -> get_header_value("Content-Type")) == "No"){
 					if(!start){
@@ -116,7 +120,6 @@ int main(){
 		}
 		else{
 			cout << "Your move is done, wait till it's your turn again !" << endl;
-			cout << res -> get_header_value("Content-Type") << endl;
 		}
 	}
 	return 0;

@@ -66,7 +66,8 @@ int main(){
 			}
 			else{
 				if(blackout != -1){
-					res.set_content("Shutdown", "Success");
+					if(cur != blackout) res.set_content("Shutdown", "Lose");
+					else res.set_content("Shutdown", "Win");
 					cur = (cur % n) + 1;
 					if(cur == blackout) svr.stop();
 				}

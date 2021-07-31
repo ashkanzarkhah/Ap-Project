@@ -23,10 +23,10 @@ public:
 			}
 		}
 
-		tot.pb({0, sz / 2});
-		tot.pb({sz / 2, 0});
-		tot.pb({sz - 1, sz / 2});
-		tot.pb({sz / 2, sz - 1});
+		tot.pb({0, 0});
+		tot.pb({sz - 1, sz - 1});
+		tot.pb({0, sz - 1});
+		tot.pb({sz - 1, 0});
 		for(int i = 0; i < cnt; i++){
 			pl.pb(tot[i]);
 			cntwall.pb(5);
