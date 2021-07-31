@@ -1,13 +1,14 @@
 cmp = g++
 flags = -std=c++11 -pthread
 
-All : Client.o Server.o run
+All : Client.o Server.o
+Allnrun : Client.o Server.o run
 
 run:
 	./Server
 
 Client.o:
-	$(cmp) -o Client $(flags) Client.cpp
+	$(cmp) Client.cpp -o Client $(flags)
 
 Server.o:
-	$(cmp) -o Server $(flags) Server.cpp
+	$(cmp) Server.cpp -o Server $(flags)

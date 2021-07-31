@@ -115,9 +115,6 @@ int main(){
 		if(res -> body == "Invalid Request"){
 			cout << "Invalid Move, Try agarin !" << endl;
 		}
-		else if(res -> body == "Finish"){
-			cout << "You win !" << endl;
-		}
 		else{
 			cout << "Your move is done, wait till it's your turn again !" << endl;
 		}
